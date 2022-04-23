@@ -1,4 +1,4 @@
-package knox.sudoku;
+package sudoku;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +13,9 @@ import java.util.Scanner;
  */
 public class Util {
 	// private constructor ensures that nobody can create an instance of Util
-	private Util() {}
-	
+	private Util() {
+	}
+
 	/**
 	 * Write the given text to the file with the given name
 	 * 
@@ -28,11 +29,11 @@ public class Util {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			// lazy way to convert all static (checked) exceptions into 
+			// lazy way to convert all static (checked) exceptions into
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Read the contents of a file with the given name
 	 * 
@@ -50,7 +51,7 @@ public class Util {
 			scanner.close();
 			return result.toString();
 		} catch (Exception e) {
-			// lazy way to convert all static (checked) exceptions into 
+			// lazy way to convert all static (checked) exceptions into
 			throw new RuntimeException(e);
 		}
 	}

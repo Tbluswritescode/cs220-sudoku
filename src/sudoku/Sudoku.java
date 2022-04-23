@@ -1,4 +1,4 @@
-package knox.sudoku;
+package sudoku;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.util.Set;
  *
  */
 public class Sudoku {
-	int[][] board = new int[9][9];
+	private int[][] board = new int[9][9];
 
 	public int get(int row, int col) {
 		// TODO: check for out of bounds
@@ -135,7 +135,6 @@ public class Sudoku {
 	}
 
 	public boolean gameOver() {
-		// TODO check that there are still open spots
 		for (int[] row : board) {
 			for (int val : row) {
 				if (val == 0)
