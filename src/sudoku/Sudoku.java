@@ -117,6 +117,19 @@ public class Sudoku {
 		return result;
 	}
 
+	// returns a string which can be written to a file and later loaded from a file
+	public String toSaveString() {
+		String result = "";
+		for (int r = 0; r < 9; r++) {
+			for (int c = 0; c < 9; c++) {
+				int val = get(r, c);
+				result += val + " ";
+			}
+			result += "\n";
+		}
+		return result;
+	}
+
 	public static void main(String[] args) {
 		Sudoku sudoku = new Sudoku();
 		sudoku.load("easy1.txt");

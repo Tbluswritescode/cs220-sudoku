@@ -13,11 +13,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -299,14 +301,22 @@ public class SudokuGUI extends JFrame {
 		addToMenu(file, "Save", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String board = sudoku.toSaveString();
+				JFileChooser jfc = new JFileChooser(new File("."));
+
+				int returnVal = jfc.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					Util.writeToFile(selectedFile, board);
+					System.out.println(selectedFile.getAbsolutePath());
+					JOptionPane.showMessageDialog(null,
+							"Saved game to file " + selectedFile.getAbsolutePath());
+				}
 				// TODO: save the current game to a file!
 				// HINT: Check the Util.java class for helpful methods
 				// HINT: check out JFileChooser
 				// https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
-				JOptionPane.showMessageDialog(null,
-						"TODO: save the current game to a file!\n"
-								+ "HINT: Check the Util.java class for helpful methods"
-								+ "HINT: Check out JFileChooser");
+
 				update();
 			}
 		});
@@ -314,6 +324,15 @@ public class SudokuGUI extends JFrame {
 		addToMenu(file, "Load", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String board = "";
+				JFileChooser jfc = new JFileChooser(new File("."));
+
+				int returnVal = jfc.showOpenDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = jfc.getSelectedFile();
+					board = Util.readFromFile(selectedFile);
+					System.out.println(selectedFile.getAbsolutePath());
+				}
 				// TODO: load a saved game from a file
 				// HINT: Check the Util.java class for helpful methods
 				// HINT: check out JFileChooser

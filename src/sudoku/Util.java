@@ -23,8 +23,12 @@ public class Util {
 	 * @param text
 	 */
 	public static void writeToFile(String filename, String text) {
+		writeToFile(new File(filename), text);
+	}
+
+	public static void writeToFile(File file, String text) {
 		try {
-			PrintStream out = new PrintStream(new File(filename));
+			PrintStream out = new PrintStream(file);
 			out.print(text);
 			out.flush();
 			out.close();
