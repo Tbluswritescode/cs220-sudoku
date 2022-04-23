@@ -359,9 +359,9 @@ public class SudokuGUI extends JFrame {
 				// TODO Auto-generated method stub
 				showLegals = !showLegals;
 				if (showLegals) {
-					JOptionPane.showMessageDialog(null, "Legal values now showing");
+					JOptionPane.showMessageDialog(null, "Show Legal Values Enabled");
 				} else {
-					JOptionPane.showMessageDialog(null, "Legal values not showed");
+					JOptionPane.showMessageDialog(null, "Show Legal Values Disabled");
 				}
 			}
 		});
