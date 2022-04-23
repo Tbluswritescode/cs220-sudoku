@@ -323,6 +323,8 @@ public class SudokuGUI extends JFrame {
 		addToMenu(help, "Hint", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				currentRow = -1;
+				currentCol = -1;
 				for (int r = 0; r < 9; r++) {
 					for (int c = 0; c < 9; c++) {
 						if (sudoku.isBlank(r, c) && sudoku.getLegalValues(r, c).size() == 1) {
