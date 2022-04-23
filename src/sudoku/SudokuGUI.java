@@ -7,22 +7,26 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
-import javax.swing.border.LineBorder;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 
 /**
  * 
@@ -57,6 +61,9 @@ public class SudokuGUI extends JFrame {
 	// hint row and hint column
 	private int hintRow = -1;
 	private int hintCol = -1;
+
+	// show legal values toggle
+	private boolean showLegals = false;
 
 	// figuring out how big to make each button
 	// honestly not sure how much detail is needed here with margins
@@ -200,6 +207,11 @@ public class SudokuGUI extends JFrame {
 					buttons[row][col].setBackground(Highlight);
 					buttons[row][col].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, FONT_COLOR));
 					setText(row, col, "_");
+					Collection<Integer> legals = sudoku.getLegalValues(row, col);
+
+					if (showLegals) {
+						JOptionPane.showMessageDialog(null, legals.toString());
+					}
 				} else {
 					buttons[row][col].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, FONT_COLOR));
 					buttons[row][col].setForeground(FONT_COLOR);
@@ -337,6 +349,20 @@ public class SudokuGUI extends JFrame {
 				}
 				JOptionPane.showMessageDialog(null, "Give the user a hint! Highlight the most constrained square\n" +
 						"which is the square where the fewest posssible values can go");
+			}
+		});
+		JMenuItem legals = new JCheckBoxMenuItem("Show Legal Values");
+		help.add(legals);
+		legals.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				showLegals = !showLegals;
+				if (showLegals) {
+					JOptionPane.showMessageDialog(null, "Legal values now showing");
+				} else {
+					JOptionPane.showMessageDialog(null, "Legal values not showed");
+				}
 			}
 		});
 
