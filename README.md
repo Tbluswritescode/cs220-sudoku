@@ -1,3 +1,9 @@
+:::::NEW FEATURES::::
+Added a theme selector feature with three unique themes to choose from
+Added a show invalid answers feature, which allows you to open a solution file to reveal incorrect answers you have made
+:::::NEW FEATURES::::
+
+
 TODO for this assignment
 --
 
