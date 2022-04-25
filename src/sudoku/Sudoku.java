@@ -1,9 +1,9 @@
 package sudoku;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,9 +23,9 @@ import java.util.Set;
  */
 public class Sudoku {
 	private int[][] board = new int[9][9];
+	private int[][] solution = new int[9][9];
 
 	public int get(int row, int col) {
-		// TODO: check for out of bounds
 		if (row < 10 && col < 10) {
 			return board[row][col];
 		}
@@ -73,19 +73,34 @@ public class Sudoku {
 	 * 0 0 0 3 0 4 0 8 9
 	 * 
 	 */
-	public void load(String filename) {
+
+	public void load(File file, int[][] b) {
 		try {
-			Scanner scan = new Scanner(new FileInputStream(filename));
+			Scanner scan = new Scanner(new FileInputStream(file));
 			// read the file
 			for (int r = 0; r < 9; r++) {
 				for (int c = 0; c < 9; c++) {
 					int val = scan.nextInt();
-					board[r][c] = val;
+					b[r][c] = val;
 				}
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void load(File file) {
+		load(file, board);
+
+	}
+
+	public void load(String filename) {
+		load(new File(filename), board);
+
+	}
+
+	public void loadSolution(File file) {
+		load(file, solution);
 	}
 
 	/**
@@ -130,6 +145,18 @@ public class Sudoku {
 		return result;
 	}
 
+	public String getSolution(File file) {
+		load(file, solution);
+		return solution.toString();
+	}
+
+	public boolean isValid(int row, int col) {
+		if (solution[row][col] != board[row][col]) {
+			return false;
+		}
+		return true;
+	}
+
 	public static void main(String[] args) {
 		Sudoku sudoku = new Sudoku();
 		sudoku.load("easy1.txt");
@@ -145,6 +172,7 @@ public class Sudoku {
 
 			System.out.println(sudoku);
 		}
+		scan.close();
 	}
 
 	public boolean gameOver() {

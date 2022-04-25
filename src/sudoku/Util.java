@@ -45,9 +45,13 @@ public class Util {
 	 * @return
 	 */
 	public static String readFromFile(String filename) {
+		return readFromFile(new File(filename));
+	}
+
+	public static String readFromFile(File file) {
 		try {
 			StringBuilder result = new StringBuilder();
-			Scanner scanner = new Scanner(new FileInputStream(filename));
+			Scanner scanner = new Scanner(new FileInputStream(file));
 			while (scanner.hasNextLine()) {
 				result.append(scanner.nextLine());
 				result.append("\n");

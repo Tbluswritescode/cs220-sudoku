@@ -66,6 +66,7 @@ public class SudokuGUI extends JFrame {
 
 	// show legal values toggle
 	private boolean showLegals = false;
+	private boolean showInvalids = false;
 
 	// figuring out how big to make each button
 	// honestly not sure how much detail is needed here with margins
@@ -135,8 +136,6 @@ public class SudokuGUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// System.out.printf("row %d, col %d, %s\n", row, col, e);
-			JButton button = (JButton) e.getSource();
 			hintCol = -1;
 			hintRow = -1;
 			if (row == currentRow && col == currentCol) {
@@ -179,6 +178,10 @@ public class SudokuGUI extends JFrame {
 	 */
 	private void update() {
 		for (int row = 0; row < numRows; row++) {
+			/*
+			 * ::::::NEW FEATURE ::::::
+			 * This allows the theme to be updated
+			 */
 			for (int col = 0; col < numCols; col++) {
 				int top = 1;
 				int left = 1;
@@ -224,6 +227,11 @@ public class SudokuGUI extends JFrame {
 					} else {
 						setText(row, col, val + "");
 					}
+					if (showInvalids && !sudoku.isBlank(row, col)) {
+						if (!sudoku.isValid(row, col)) {
+							buttons[row][col].setBackground(Color.RED);
+						}
+					}
 				}
 			}
 		}
@@ -250,6 +258,7 @@ public class SudokuGUI extends JFrame {
 			}
 		});
 		addToMenu(file, "Theme Select", new ActionListener() {
+			/** This menu item allows the user to select from three different themes */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JPopupMenu color = new JPopupMenu("Theme Select");
@@ -324,23 +333,17 @@ public class SudokuGUI extends JFrame {
 		addToMenu(file, "Load", new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String board = "";
 				JFileChooser jfc = new JFileChooser(new File("."));
 
 				int returnVal = jfc.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = jfc.getSelectedFile();
-					board = Util.readFromFile(selectedFile);
 					System.out.println(selectedFile.getAbsolutePath());
+					sudoku.load(selectedFile);
+					JOptionPane.showMessageDialog(null,
+							"Loaded game from file " + selectedFile.getAbsolutePath());
+
 				}
-				// TODO: load a saved game from a file
-				// HINT: Check the Util.java class for helpful methods
-				// HINT: check out JFileChooser
-				// https://docs.oracle.com/javase/tutorial/uiswing/components/filechooser.html
-				JOptionPane.showMessageDialog(null,
-						"TODO: load a saved game from a file\n"
-								+ "HINT: Check the Util.java class for helpful methods\n"
-								+ "HINT: Check out JFileChooser");
 				update();
 			}
 		});
@@ -375,7 +378,6 @@ public class SudokuGUI extends JFrame {
 		legals.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				// TODO Auto-generated method stub
 				showLegals = !showLegals;
 				if (showLegals) {
 					JOptionPane.showMessageDialog(null, "Show Legal Values Enabled");
@@ -385,6 +387,37 @@ public class SudokuGUI extends JFrame {
 			}
 		});
 
+		/*
+		 * ::::::NEW FEATURE ::::::
+		 * This menu option asks a user to load a solution text file and highlights any
+		 * answers which do not match the solution
+		 * Next expansion would be allowing you to clear buttons after discovering a
+		 * mistake.
+		 */
+		JMenuItem invalids = new JCheckBoxMenuItem("Highlight Incorrect Answers");
+		help.add(invalids);
+		invalids.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				showInvalids = !showInvalids;
+				if (showInvalids) {
+					JFileChooser jfc = new JFileChooser(new File("."));
+
+					int returnVal = jfc.showOpenDialog(null);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File selectedFile = jfc.getSelectedFile();
+						System.out.println(selectedFile.getAbsolutePath());
+						sudoku.loadSolution(selectedFile);
+						JOptionPane.showMessageDialog(null,
+								"Loaded solution from file " + selectedFile.getAbsolutePath());
+
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Highlight incorrect values Disabled");
+				}
+				update();
+			}
+		});
 		this.setJMenuBar(menuBar);
 	}
 
